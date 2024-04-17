@@ -18,21 +18,21 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Function to fetch dynamic variables from the home URL
-async function fetchDynamicVariables() {
-  try {
-    const homeUrl = "https://www.carinfo.app/";
-    const response = await axios.get(homeUrl);
-    // Extract cookies, session IDs, or any other dynamic variables from response.headers or response.data
-    // Return the extracted variables
-    return {
-      cookies: response.headers["set-cookie"],
-      // Add other dynamic variables here if needed
-    };
-  } catch (error) {
-    throw new Error("Failed to fetch dynamic variables");
-  }
-}
+// // Function to fetch dynamic variables from the home URL
+// async function fetchDynamicVariables() {
+//   try {
+//     const homeUrl = "https://www.carinfo.app/";
+//     const response = await axios.get(homeUrl);
+//     // Extract cookies, session IDs, or any other dynamic variables from response.headers or response.data
+//     // Return the extracted variables
+//     return {
+//       cookies: response.headers["set-cookie"],
+//       // Add other dynamic variables here if needed
+//     };
+//   } catch (error) {
+//     throw new Error("Failed to fetch dynamic variables");
+//   }
+// }
 
 // Middleware to scrape owner name and registered RTO details
 app.use("/rc-details/:vehicleNumber", async (req, res, next) => {
@@ -40,23 +40,26 @@ app.use("/rc-details/:vehicleNumber", async (req, res, next) => {
     const { vehicleNumber } = req.params;
 
     // Fetch dynamic variables from the home URL
-    const dynamicVariables = await fetchDynamicVariables();
+    //const dynamicVariables = await fetchDynamicVariables();
 
     const postUrl = `https://www.carinfo.app/rc-details/${vehicleNumber}`;
 
-    // Make POST request to fetch HTML content using dynamic variables
-    const response = await axios.post(postUrl, null, {
-      headers: {
-        // Pass dynamic variables in headers if required
-        // For example, set cookies in the request header if it exists
-        Cookie: dynamicVariables.cookies
-          ? dynamicVariables.cookies.join("; ")
-          : "",
-        // Add other headers as needed
-      },
-    });
+    // // Make POST request to fetch HTML content using dynamic variables
+    // const response = await axios.post(postUrl, null, {
+    //   headers: {
+    //     // Pass dynamic variables in headers if required
+    //     // For example, set cookies in the request header if it exists
+    //     Cookie: dynamicVariables.cookies
+    //       ? dynamicVariables.cookies.join("; ")
+    //       : "",
+    //     // Add other headers as needed
+    //   },
+    // });
 
+    // Make HTTP request to fetch HTML content
+    const response = await axios.get(postUrl);
     const html = response.data;
+
 
     // Use Cheerio to parse HTML
     const $ = cheerio.load(html);
