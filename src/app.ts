@@ -109,7 +109,7 @@ app.use("/rc-details/:vehicleNumber", async (req, res, next) => {
 });
 
 // New endpoint to print today's date
-app.get("/rc-details/today", (req, res) => {
+app.get("/rc-details", (req, res) => {
   // Get today's date
   const today = new Date().toLocaleDateString();
 
